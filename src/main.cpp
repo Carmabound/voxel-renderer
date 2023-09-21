@@ -6,7 +6,18 @@
 #include <iostream>
 
 // can resize the viewport if the user resizes the window
-//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
+
+// when esc pressed, closes window
+void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+
 
 int main()
 {
@@ -32,7 +43,7 @@ int main()
     glfwMakeContextCurrent(window);
 
     //We register the callback functions after we've created the window and before the render loop is initiated.
-    //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     //loads the address of opengl func pointers
     // glfwGetProcAddress is os-specific and it gets the correct one
@@ -49,12 +60,20 @@ int main()
     // usually make this the same as glfw's window size
     glViewport(0, 0, 800, 600);
 
-    // render loop
+    // RENDER LOOP!!
     // glfwWindowShouldClose checks if glfw has been told to close
     // glfwPollEvents checks if any events are triggered, updates the window state, and calls corresponding funcs
     // glfwSwapBuffers swaps the color buffer that is used to render the colors, and shows it as output
     // this is what double buffering is!
     while (!glfwWindowShouldClose(window)) {
+
+        //input
+        processInput(window);
+
+        //rendering commands here
+        glClearColor(0.5f, 0.3f, 0.6f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //check and call events and swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -64,6 +83,8 @@ int main()
 
     return 0;
 }
+
+
 
 /*#include <glad/glad.h>
 #include <GLFW/glfw3.h>
