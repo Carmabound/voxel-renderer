@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17) # Set your preferred C++ standard
 # Add your source files
 add_executable(voxel-renderer src/main.cpp
         src/main.cpp
+        src/glad.c
 )
 
 # Add any external libraries or dependencies (e.g., OpenGL, GLFW)
