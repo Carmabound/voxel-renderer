@@ -108,30 +108,49 @@ int main()
     // ------------------------------------------------------------------
     // (0,0) in normalized coordinates is the middle of the screen instead of top left
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
+            0.5f, 0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
+            -0.5f, -0.5f, 0.0f,
+            -0.5f, 0.5f, 0.0f
+    };
+    unsigned int indices[] = {
+            0, 1, 3, //first triangle
+            1, 2, 3 //second triangle
     };
 
 
 
     //********GRAPHICS PIPELINE********
     //first in graphics pipeline, create buffer object VBO to store a large number of vertices in the GPU's memory
-    unsigned int VBO;
+    //A vertex array object (also known as VAO) can be bound just like a vertex buffer object and any subsequent vertex attribute calls from that point on will be stored inside the VAO
+    unsigned int VBO, VAO, EBO;
     glGenBuffers(1, &VBO);
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &EBO);
+    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+    glBindVertexArray(VAO);
+
     //OpenGL allows us to bind to several buffers at once as long as they have a different buffer type.
     //From this point on, any buffer calls we make (on the GL_ARRAY_BUFFER target) will be used to configure the currently bound buffer, which is VBO.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     //copies the previously defined vertex data into the buffer's memory
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        //GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
+        //GL_STATIC_DRAW: the data is set only once and used many times.
+        //GL_DYNAMIC_DRAW: the data is changed a lot and used many times
+        // my triangle position data is only set once and used a lot, so I will use GL_STATIC_DRAW
 
-    //GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
-    //GL_STATIC_DRAW: the data is set only once and used many times.
-    //GL_DYNAMIC_DRAW: the data is changed a lot and used many times
-    // my triangle position data is only set once and used a lot, so I will use GL_STATIC_DRAW
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+    //tell OpenGL how it should interpret the vertex data (per vertex attribute) using glVertexAttribPointer
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
     //next in graphics pipeline is vertex and fragment shader
 
+    //uncomment to draw in wireframe
+    // default is glPolygonMode(GL_FRONT_AND_BACK, GL_FILL).
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // render loop
     // -----------
@@ -148,6 +167,13 @@ int main()
         //rendering commands here
         glClearColor(0.5f, 0.3f, 0.6f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        //draw first triangle
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
