@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17) # Set your preferred C++ standard
 add_executable(voxel-renderer src/main.cpp
         src/main.cpp
         src/glad.c
-        src/shader.h
+        include/shader.h
 )
 
 # Add any external libraries or dependencies (e.g., OpenGL, GLFW)
