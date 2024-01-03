@@ -449,8 +449,10 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load image, create texture and generate mipmaps
     int width, height, nrChannels;
-    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-    unsigned char *data = stbi_load("../resources/container.jpg", &width, &height, &nrChannels, 0);
+
+    stbi_set_flip_vertically_on_load(true); //unflips upside down
+
+    unsigned char *data = stbi_load("../resources/liesl.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -460,6 +462,7 @@ int main()
     {
         std::cout << "Failed to load texture" << std::endl;
     }
+
     stbi_image_free(data);
 
 
@@ -473,7 +476,7 @@ int main()
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(1.0f, 0.75f, 0.80f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // bind Texture
