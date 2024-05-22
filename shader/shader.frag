@@ -8,6 +8,6 @@ uniform sampler2D texture2;
 
 
 void main()
-{ // linearly interpolate between both textures (40% liesl, 60% container)
-    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.6);
+{ // linearly interpolate between both textures (70% liesl, 30% container)
+    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.3);
 }
