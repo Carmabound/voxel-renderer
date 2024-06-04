@@ -8,6 +8,7 @@ add_executable(voxel-renderer src/main.cpp
         src/main.cpp
         src/glad.c
         include/shader.h
+        include/camera.h
 )
 
 # Add any external libraries or dependencies (e.g., OpenGL, GLFW)
